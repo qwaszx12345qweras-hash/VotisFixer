@@ -1,0 +1,23 @@
+import:
+    litebans.api.Database
+
+on chat:
+    set {_uuid} to uuid of player
+    set {_db} to Database.get()
+    if {_db} is not set:
+        stop
+    set {_muted} to {_db}.isPlayerMuted({_uuid}, null)
+    if {_muted} is true:
+        cancel event
+        send "&cВы заглушены и не можете писать в чат." to player
+
+on command:
+    set {_cmd} to command label
+    if {_cmd} is not "msg", "tell", "w", "whisper", "m", "t", "pm", "message", "r", "reply", "me", "say", "mail":
+        stop
+    set {_uuid} to uuid of player
+    set {_db} to Database.get()
+    set {_muted} to {_db}.isPlayerMuted({_uuid}, null)
+    if {_muted} is true:
+        cancel event
+        send "&cВы заглушены и не можете писать в чат." to player
